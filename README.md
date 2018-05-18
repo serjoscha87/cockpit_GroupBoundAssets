@@ -9,3 +9,6 @@ As soon as this plugin is installed cockpit will look up the current (logged in)
 **TODO**
  - check what happens when a user does not have a group (think this may happen and cause failures)
  - add a hook to the assets view/list that makes the assets list at least show the creator's group (perhaps later more)
+ 
+ ## Other projects according to cockpit
+https://github.com/serjoscha87/cockpit_GROUPS/
