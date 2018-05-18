@@ -20,7 +20,6 @@ class GroupBoundAssets extends \Cockpit\Controller\Assets {
         if ($skip   = $this->param("skip", null))   $options["skip"] = $skip;
 
         $assets = $this->storage->find("cockpit/assets", $options);
-        //$count  = (!$skip && !$limit) ? count($assets) : $this->storage->count("cockpit/assets", $filter);
 
         $this->app->trigger('cockpit.assets.list', [&$assets]);
 
