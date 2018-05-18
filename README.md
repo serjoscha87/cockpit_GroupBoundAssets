@@ -10,5 +10,9 @@ As soon as this plugin is installed cockpit will look up the current (logged in)
  - check what happens when a user does not have a group (think this may happen and cause failures)
  - add a hook to the assets view/list that makes the assets list at least show the creator's group (perhaps later more)
  
+ ## Installation
+ 
+The "GroupBoundAssets" directory (which is next to the README.md) goes to your /cockpit/addons/ folder so that the bootstrap.php ist directly beneath /cockpit/addons/GroupBoundAssets/
+ 
  ## Other projects according to cockpit
 https://github.com/serjoscha87/cockpit_GROUPS/
