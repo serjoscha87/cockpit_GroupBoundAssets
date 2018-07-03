@@ -7,10 +7,13 @@ $app->path('GroupBoundAssets', 'addons/GroupBoundAssets/'); // shorten path
 $app->bindClass('Cockpit\\Controller\\GroupBoundAssets', 'assetsmanager');
 
 // load js
-$app['app.assets.base'] = array_merge($app['app.assets.base'], [
-    '/addons/GroupBoundAssets/assets/js/GroupBoundAssets.js'
-]);
-
+if( !empty($app['app.assets.base']) ){
+    $app['app.assets.base'] = array_merge($app['app.assets.base'], [
+        '/addons/GroupBoundAssets/assets/js/GroupBoundAssets.js'
+    ]);
+} else{
+    $app['app.assets.base'] = ['/addons/GroupBoundAssets/assets/js/GroupBoundAssets.js'];
+}
 
 $app->on('cockpit.assets.list', function(&$assets) {
    
