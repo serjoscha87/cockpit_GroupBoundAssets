@@ -9,21 +9,49 @@ class GroupBoundAssets extends \Cockpit\Controller\Assets {
     }
 
     public function listAssets() {
-
-        $options = [
-            'sort' => ['created' => -1]
-        ];
-
-        if ($filter = $this->param("filter", null)) $options["filter"] = $filter;
-        if ($limit  = $this->param("limit", null))  $options["limit"] = $limit;
-        if ($sort   = $this->param("sort", null))   $options["sort"] = $sort;
-        if ($skip   = $this->param("skip", null))   $options["skip"] = $skip;
-
-        $assets = $this->storage->find("cockpit/assets", $options);
-
-        $this->app->trigger('cockpit.assets.list', [&$assets]);
-
-        return ['assets' => $assets->toArray(), 'count'=>$assets->count()];
+        $this->ensureFolder();
+        return parent::listAssets();
     }
 
+    public function upload() {
+        $this->ensureFolder();
+        return parent::upload();
+    }
+
+    public function addFolder() {
+        $this->ensureFolder();
+        return parent::addFolder();
+    }
+
+    private function ensureFolder() {
+        $group = $this->user['group'];
+        $currentFolder = $this->param('folder', '');
+
+        if ($group === '') return; // TODO: Create a folder for this specific user? Is this even possible?
+        if ($this->app->module('cockpit')->isSuperAdmin($group)) return;
+        if ($currentFolder !== '') return;
+
+        $folderData = ['_p' => $currentFolder, 'name' => sprintf('Group: %s', $group)];
+
+        $folders = $this->app->storage
+            ->find('cockpit/assets_folders', ['filter' => $folderData])
+            ->toArray();
+
+        if (!isset($folders[0])) {
+            $result = $this->app->storage->save('cockpit/assets_folders', $folderData);
+            $folders = $this->app->storage
+                        ->find('cockpit/assets_folders', ['filter' => $folderData])
+                        ->toArray();
+        }
+
+        $folderId = $folders[0]['_id'];
+
+        if (!is_array($_REQUEST['filter'])) {
+            $_REQUEST['filter'] = [];
+        }
+
+        $_REQUEST['folder'] = $folderId;
+        $_REQUEST['filter']['folder'] = $folderId;
+        $_REQUEST['parent'] = $folderId;
+    }
 }
